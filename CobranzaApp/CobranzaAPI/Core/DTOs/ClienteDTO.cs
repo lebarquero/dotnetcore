@@ -1,19 +1,14 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CobranzaApi.Core.Models
+namespace CobranzaAPI.Core.DTOs
 {
-    [Table("Clientes")]
-    public class Cliente
+    public class ClienteDTO
     {
         [Key]
         public int IdCliente { get; set; }
 
-        [Required]
-        public DateTime FecRegistro { get; set; }
-
-        [Required]
+        [Required(ErrorMessage = "El nombre del cliente es requerido.")]
         [StringLength(200, ErrorMessage = "La longuitud máxima de caracteres permitida es de 200.")]
         public string NombreCliente { get; set; }
 
@@ -25,11 +20,5 @@ namespace CobranzaApi.Core.Models
 
         [Required]
         public bool Activo { get; set; }
-
-        // public virtual ICollection<Entrega> Entregas { get; set; }
-
-        // public virtual ICollection<Bien> Bienes { get; set; }
-
-        // public virtual ICollection<Carga> Cargas { get; set; }
-    }   
+    }
 }

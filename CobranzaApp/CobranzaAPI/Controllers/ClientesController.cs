@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CobranzaApi.Core.Models;
-using CobranzaApi.Persistence;
+using CobranzaAPI.Core.Entities;
+using CobranzaAPI.Persistence;
 
-// TODO :: Replace de model parameters name for generic name 'entity'
 namespace CobranzaAPI.Controllers
 {
     [Route("api/[controller]")]
