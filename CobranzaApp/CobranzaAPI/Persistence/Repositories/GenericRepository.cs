@@ -60,9 +60,9 @@ namespace CobranzaAPI.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
         
-        public async Task DeleteAsync(T entity)
+        public async Task DeleteAsync(int id)
         {
-            _dbContext.Set<T>().Remove(entity);
+            _dbContext.Set<T>().FindAsync(id).Remove();
             await _dbContext.SaveChangesAsync();
         }
     }
