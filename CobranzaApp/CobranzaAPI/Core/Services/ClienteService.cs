@@ -17,7 +17,7 @@ namespace CobranzaAPI.Core.Services
             _entityRepository = entityRepository;
         }
 
-        public async Task<IList<ClienteDTO>> ListAsync(string criteria)
+        public async Task<List<ClienteDTO>> ListAsync(string criteria)
         {
             IList<Cliente> entities;
 
