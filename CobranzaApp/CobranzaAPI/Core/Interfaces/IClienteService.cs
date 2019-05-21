@@ -12,6 +12,6 @@ namespace CobranzaAPI.Core.Interfaces
         Task<IList<ClienteDTO>> ListAsync(string criteria);
         Task<ClienteDTO> AddAsync(ClienteDTO model);
         Task UpdateAsync(ClienteDTO model);
-        Task DeleteAsync(ClienteDTO model);
+        Task DeleteAsync(int id);
     }
 }

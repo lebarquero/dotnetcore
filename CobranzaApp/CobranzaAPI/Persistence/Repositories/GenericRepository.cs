@@ -22,11 +22,6 @@ namespace CobranzaAPI.Persistence.Repositories
             return await _dbContext.Set<T>().FindAsync(id);
         }
         
-        // public async Task<IList<T>> ListAllAsync()
-        // {
-        //     return await _dbContext.Set<T>().ToListAsync();
-        // }
-
         public async Task<IList<T>> ListAsync(Expression<Func<T, bool>> filter = null, bool asNoTracking = true)
         {
             IQueryable<T> qry = _dbContext.Set<T>();
@@ -34,7 +29,6 @@ namespace CobranzaAPI.Persistence.Repositories
             if (filter != null)
             {
                 qry = qry.Where(filter);
-                // return await _dbContext.Set<T>().AsQueryable().Where(filter).AsNoTracking().ToListAsync();
             }
 
             if (!asNoTracking)
@@ -43,7 +37,6 @@ namespace CobranzaAPI.Persistence.Repositories
             }
 
             return await qry.AsNoTracking().ToListAsync();
-            // return await _dbContext.Set<T>().ToListAsync();
         }
         
         public async Task<T> AddAsync(T entity)

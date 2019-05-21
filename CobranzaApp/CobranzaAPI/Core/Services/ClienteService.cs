@@ -67,7 +67,7 @@ namespace CobranzaAPI.Core.Services
             var entity = await Mapping(model);
             if (entity == null)
             {
-                // TODO
+                return null;
             }
 
             await _entityRepository.AddAsync(entity);
@@ -86,9 +86,9 @@ namespace CobranzaAPI.Core.Services
             await _entityRepository.UpdateAsync(entity);
         }
 
-        public async Task DeleteAsync(ClienteDTO model)
+        public async Task DeleteAsync(int id)
         {
-            var entity = await Mapping(model);
+            var entity = await _entityRepository.GetByIdAsync(id);
             if (entity == null)
             {
                 // TODO
