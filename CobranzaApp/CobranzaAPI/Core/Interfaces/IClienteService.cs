@@ -8,10 +8,10 @@ namespace CobranzaAPI.Core.Interfaces
 {
     public interface IClienteService
     {
-        Task<T> GetByIdAsync(int id = 0);
+        Task<ClienteDTO> GetByIdAsync(int id = 0);
         Task<IList<ClienteDTO>> ListAsync(string criteria);
-        Task<ClienteDTO> AddAsync(ClienteDTO entity);
-        Task UpdateAsync(ClienteDTO entity);
-        Task DeleteAsync(int id);
+        Task<ClienteDTO> AddAsync(ClienteDTO model);
+        Task UpdateAsync(ClienteDTO model);
+        Task DeleteAsync(ClienteDTO model);
     }
 }

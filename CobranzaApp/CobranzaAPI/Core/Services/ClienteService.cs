@@ -3,7 +3,7 @@ using CobranzaAPI.Core.Entities;
 using CobranzaAPI.Core.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq.Expressions;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CobranzaAPI.Core.Services
@@ -19,11 +19,11 @@ namespace CobranzaAPI.Core.Services
 
         public async Task<IList<ClienteDTO>> ListAsync(string criteria)
         {
-            Task<IList<Cliente>> entities;
+            IList<Cliente> entities;
 
             if (!string.IsNullOrEmpty(criteria))
             {
-                entities = await _entityRepository.ListAsync(c => c.Nombre.Contains(criteria));
+                entities = await _entityRepository.ListAsync(c => c.NombreCliente.Contains(criteria));
             }
             else
             {
@@ -36,7 +36,7 @@ namespace CobranzaAPI.Core.Services
                 DireccionCliente = i.DireccionCliente,
                 TelefonoCliente = i.TelefonoCliente,
                 Activo = i.Activo
-            });
+            }).ToList();
         }
 
         public async Task<ClienteDTO> GetByIdAsync(int id = 0)
@@ -59,19 +59,69 @@ namespace CobranzaAPI.Core.Services
                 DireccionCliente = entity.DireccionCliente,
                 TelefonoCliente = entity.TelefonoCliente,
                 Activo = entity.Activo
+            };
+        }
+
+        public async Task<ClienteDTO> AddAsync(ClienteDTO model)
+        {
+            var entity = await Mapping(model);
+            if (entity == null)
+            {
+                // TODO
             }
+
+            await _entityRepository.AddAsync(entity);
+
+            return model;
         }
 
-        public async Task<ClienteDTO> AddAsync(ClienteDTO entity)
+        public async Task UpdateAsync(ClienteDTO model)
         {
+            var entity = await Mapping(model);
+            if (entity == null)
+            {
+                // TODO
+            }
+
+            await _entityRepository.UpdateAsync(entity);
         }
 
-        public async Task UpdateAsync(ClienteDTO entity)
+        public async Task DeleteAsync(ClienteDTO model)
         {
+            var entity = await Mapping(model);
+            if (entity == null)
+            {
+                // TODO
+            }
+
+            await _entityRepository.DeleteAsync(entity);
         }
 
-        public async Task DeleteAsync(int id)
+        async Task<Cliente> Mapping(ClienteDTO model)
         {
+            Cliente entity;
+
+            if (model.IdCliente == 0)
+            {
+                entity = new Cliente {
+                    FecRegistro = DateTime.Now
+                    , Activo = true
+                };
+            }
+            else
+            {
+                entity = await _entityRepository.GetByIdAsync(model.IdCliente);
+                if (entity == null)
+                    return null;
+                
+                entity.Activo = model.Activo;
+            }
+
+            entity.NombreCliente = model.NombreCliente;
+            entity.DireccionCliente = model.DireccionCliente;
+            entity.TelefonoCliente = model.TelefonoCliente;
+            
+            return entity;
         }
     }
 }
