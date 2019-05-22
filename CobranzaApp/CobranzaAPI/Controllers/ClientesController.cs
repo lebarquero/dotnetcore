@@ -14,7 +14,7 @@ namespace CobranzaAPI.Controllers
     {
         private readonly IClienteService _clienteService;
 
-        public ClientesController(IClienteService clienteService) //CobranzaContext context
+        public ClientesController(IClienteService clienteService)
         {
             _clienteService = clienteService;
         }
@@ -23,7 +23,8 @@ namespace CobranzaAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ClienteDTO>>> GetClientes(string criteria)
         {
-            return await _clienteService.ListAsync(criteria);
+            var model = await _clienteService.ListAsync(criteria);
+            return model.ToList();
         }
 
         // GET: api/Clientes/5
@@ -55,14 +56,7 @@ namespace CobranzaAPI.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ClienteExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return NoContent();
@@ -91,9 +85,9 @@ namespace CobranzaAPI.Controllers
             return NoContent();
         }
 
-        private bool ClienteExists(int id)
-        {
-            return _context.Clientes.Any(e => e.IdCliente == id);
-        }
+        // private bool ClienteExists(int id)
+        // {
+        //     return _context.Clientes.Any(e => e.IdCliente == id);
+        // }
     }
 }
