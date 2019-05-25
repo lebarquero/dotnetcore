@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CobranzaAPI.Core.Entities;
+using CobranzaAPI.Core.Interfaces;
+using CobranzaAPI.Core.Services;
 using CobranzaAPI.Persistence;
+using CobranzaAPI.Persistence.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace CobranzaAPI
@@ -34,6 +31,9 @@ namespace CobranzaAPI
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Info { Title = "CobranzaAPI", Version = "v1"}); });
+
+            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            services.AddScoped<IClienteService, ClienteService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
