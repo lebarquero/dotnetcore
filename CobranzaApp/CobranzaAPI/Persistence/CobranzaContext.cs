@@ -14,7 +14,7 @@ namespace CobranzaAPI.Persistence
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Cliente>();
+            builder.Entity<Cliente>(ConfigureCliente);
         }
 
         private void ConfigureCliente(EntityTypeBuilder<Cliente> builder)
