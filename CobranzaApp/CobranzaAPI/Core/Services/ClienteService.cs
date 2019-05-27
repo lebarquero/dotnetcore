@@ -23,7 +23,7 @@ namespace CobranzaAPI.Core.Services
 
             if (!string.IsNullOrEmpty(criteria))
             {
-                entities = await _entityRepository.ListAsync(c => c.NombreCliente.Contains(criteria));
+                entities = await _entityRepository.ListAsync(c => c.NombreCliente.ToLower().Contains(criteria.ToLower()));
             }
             else
             {
@@ -80,7 +80,7 @@ namespace CobranzaAPI.Core.Services
             var entity = await Mapping(model);
             if (entity == null)
             {
-                // TODO
+                return;
             }
 
             await _entityRepository.UpdateAsync(entity);
