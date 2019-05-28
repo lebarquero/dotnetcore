@@ -52,15 +52,6 @@ namespace CobranzaAPI.Controllers
 
             await _clienteService.UpdateAsync(model);
 
-            // try
-            // {
-            //     await _clienteService.UpdateAsync(model);
-            // }
-            // catch (DbUpdateConcurrencyException)
-            // {
-            //     throw;
-            // }
-
             return NoContent();
         }
 

@@ -8,10 +8,9 @@ namespace CobranzaAPI.Core.Interfaces
     public interface IGenericRepository<T> where T : class
     {
         Task<T> GetByIdAsync(int id);
-        // Task<IList<T>> ListAllAsync();
         Task<IList<T>> ListAsync(Expression<Func<T, bool>> filter = null, bool asNoTracking = true);
-        Task<T> AddAsync(T entity);
-        Task UpdateAsync(T entity);
-        Task DeleteAsync(T entity);
+        Task<bool> AddAsync(T entity);
+        Task<bool> UpdateAsync(T entity);
+        Task<bool> DeleteAsync(T entity);
     }
 }

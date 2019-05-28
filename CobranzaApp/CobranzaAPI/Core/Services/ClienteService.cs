@@ -62,39 +62,58 @@ namespace CobranzaAPI.Core.Services
             };
         }
 
-        public async Task<ClienteDTO> AddAsync(ClienteDTO model)
+        public async Task<bool> AddAsync(ClienteDTO model)
         {
             var entity = await Mapping(model);
             if (entity == null)
             {
-                return null;
+                return false;
             }
 
-            await _entityRepository.AddAsync(entity);
-
-            return model;
+            try
+            {
+                return await _entityRepository.AddAsync(entity);                
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public async Task UpdateAsync(ClienteDTO model)
+        public async Task<bool> UpdateAsync(ClienteDTO model)
         {
             var entity = await Mapping(model);
             if (entity == null)
             {
-                return;
+                return false;
             }
 
-            await _entityRepository.UpdateAsync(entity);
+            try
+            {
+                return await _entityRepository.UpdateAsync(entity);   
+            }
+            catch
+            {
+                return false;
+            }
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var entity = await _entityRepository.GetByIdAsync(id);
             if (entity == null)
             {
-                // TODO
+                return false;
             }
 
-            await _entityRepository.DeleteAsync(entity);
+            try
+            {
+                return await _entityRepository.DeleteAsync(entity);   
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         async Task<Cliente> Mapping(ClienteDTO model)
