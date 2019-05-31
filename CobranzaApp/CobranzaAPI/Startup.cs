@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using CobranzaAPI.Core.Entities;
 using CobranzaAPI.Core.Exceptions;
 using CobranzaAPI.Core.Interfaces;
 using CobranzaAPI.Core.Services;
@@ -77,6 +76,11 @@ namespace CobranzaAPI
                     status = HttpStatusCode.NotFound;
                     result = "{\"title\":\"Información no encontrada!\", \"status\":404}";
                 }
+                else if (exceptionType == typeof(AppValidationException))
+                {
+                    status = ((AppValidationException)exception).StatusCode;
+                    result = JsonConvert.SerializeObject(new { errors = ((AppValidationException)exception).Failures, title = exception.Message, status = (int)status });
+                }
                 else if (exception is AppException)
                 {
                     status = ((AppException)exception).StatusCode;
@@ -84,7 +88,7 @@ namespace CobranzaAPI
                 }
                 else
                 {
-                    result = "{\"title\":\"Se produjo un error en la aplicación!\", \"status\":505}";
+                    result = "{\"title\":\"Se produjo un error en la aplicación!\", \"status\":500}";
                 }
 
                 context.Response.ContentType = "application/problem+json";

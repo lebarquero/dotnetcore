@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using CobranzaAPI.Core.Interfaces;
 using CobranzaAPI.Core.DTOs;
 
@@ -12,18 +11,15 @@ namespace CobranzaAPI.Controllers
     [ApiController]
     public class ClientesController : ControllerBase
     {
-        private readonly IClienteService _clienteService;
+        private readonly IClienteService _modelService;
 
-        public ClientesController(IClienteService clienteService)
-        {
-            _clienteService = clienteService;
-        }
+        public ClientesController(IClienteService clienteService) => _modelService = clienteService;
 
         // GET: api/Clientes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ClienteDTO>>> GetClientes(string criteria)
         {
-            var model = await _clienteService.ListAsync(criteria);
+            var model = await _modelService.ListAsync(criteria);
             return model.ToList();
         }
 
@@ -31,7 +27,7 @@ namespace CobranzaAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ClienteDTO>> GetCliente(int id)
         {
-            var model = await _clienteService.GetByIdAsync(id);
+            var model = await _modelService.GetByIdAsync(id);
             return model;
         }
 
@@ -39,7 +35,7 @@ namespace CobranzaAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<ClienteDTO>> PostCliente(ClienteDTO model)
         {
-            await _clienteService.AddAsync(model);
+            await _modelService.AddAsync(model);
             return CreatedAtAction(nameof(GetCliente), new { id = model.IdCliente }, model);
         }
 
@@ -47,18 +43,20 @@ namespace CobranzaAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCliente(int id, ClienteDTO model)
         {
-            if (id != model.IdCliente)
-                return BadRequest();
+            if (id == model.IdCliente)
+            {
+                await _modelService.UpdateAsync(model);
+                return NoContent();
+            }
 
-            await _clienteService.UpdateAsync(model);
-            return NoContent();
+            return BadRequest();
         }
 
         // DELETE: api/Clientes/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCliente(int id)
         {
-            await _clienteService.DeleteAsync(id);
+            await _modelService.DeleteAsync(id);
             return NoContent();
         }
     }
