@@ -32,27 +32,7 @@ namespace CobranzaAPI.Controllers
         public async Task<ActionResult<ClienteDTO>> GetCliente(int id)
         {
             var model = await _clienteService.GetByIdAsync(id);
-
-            if (model == null)
-            {
-                return NotFound();
-            }
-
             return model;
-        }
-
-        // PUT: api/Clientes/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCliente(int id, ClienteDTO model)
-        {
-            if (id != model.IdCliente)
-            {
-                return BadRequest();
-            }
-
-            await _clienteService.UpdateAsync(model);
-
-            return NoContent();
         }
 
         // POST: api/Clientes
@@ -60,27 +40,26 @@ namespace CobranzaAPI.Controllers
         public async Task<ActionResult<ClienteDTO>> PostCliente(ClienteDTO model)
         {
             await _clienteService.AddAsync(model);
-
             return CreatedAtAction(nameof(GetCliente), new { id = model.IdCliente }, model);
+        }
+
+        // PUT: api/Clientes/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCliente(int id, ClienteDTO model)
+        {
+            if (id != model.IdCliente)
+                return BadRequest();
+
+            await _clienteService.UpdateAsync(model);
+            return NoContent();
         }
 
         // DELETE: api/Clientes/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCliente(int? id)
+        public async Task<IActionResult> DeleteCliente(int id)
         {
-            if (!id.HasValue)
-            {
-                return BadRequest();
-            }
-
-            await _clienteService.DeleteAsync((int)id);
-
+            await _clienteService.DeleteAsync(id);
             return NoContent();
         }
-
-        // private bool ClienteExists(int id)
-        // {
-        //     return _context.Clientes.Any(e => e.IdCliente == id);
-        // }
     }
 }

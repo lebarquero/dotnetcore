@@ -1,5 +1,6 @@
 using CobranzaAPI.Core.DTOs;
 using CobranzaAPI.Core.Entities;
+using CobranzaAPI.Core.Exceptions;
 using CobranzaAPI.Core.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -42,16 +43,11 @@ namespace CobranzaAPI.Core.Services
         public async Task<ClienteDTO> GetByIdAsync(int id = 0)
         {
             if (id == 0)
-            {
                 return new ClienteDTO();
-            }
 
             var entity = await _entityRepository.GetByIdAsync(id);
-
             if (entity == null)
-            {
-                return null;
-            }
+                throw new AppNotFoundException();
 
             return new ClienteDTO {
                 IdCliente = entity.IdCliente,
@@ -62,58 +58,34 @@ namespace CobranzaAPI.Core.Services
             };
         }
 
-        public async Task<bool> AddAsync(ClienteDTO model)
+        public async Task<ClienteDTO> AddAsync(ClienteDTO model)
         {
             var entity = await Mapping(model);
             if (entity == null)
-            {
-                return false;
-            }
+                throw new AppNotFoundException();
 
-            try
-            {
-                return await _entityRepository.AddAsync(entity);                
-            }
-            catch
-            {
-                return false;
-            }
+            await _entityRepository.AddAsync(entity);
+            model.IdCliente = entity.IdCliente;
+
+            return model;
         }
 
-        public async Task<bool> UpdateAsync(ClienteDTO model)
+        public async Task UpdateAsync(ClienteDTO model)
         {
             var entity = await Mapping(model);
             if (entity == null)
-            {
-                return false;
-            }
+                throw new AppNotFoundException();
 
-            try
-            {
-                return await _entityRepository.UpdateAsync(entity);   
-            }
-            catch
-            {
-                return false;
-            }
+            await _entityRepository.UpdateAsync(entity);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DeleteAsync(int id)
         {
             var entity = await _entityRepository.GetByIdAsync(id);
             if (entity == null)
-            {
-                return false;
-            }
+                throw new AppNotFoundException();
 
-            try
-            {
-                return await _entityRepository.DeleteAsync(entity);   
-            }
-            catch
-            {
-                return false;
-            }
+            await _entityRepository.DeleteAsync(entity);
         }
 
         async Task<Cliente> Mapping(ClienteDTO model)

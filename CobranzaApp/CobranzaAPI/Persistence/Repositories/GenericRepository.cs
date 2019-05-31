@@ -39,36 +39,22 @@ namespace CobranzaAPI.Persistence.Repositories
             return await qry.AsNoTracking().ToListAsync();
         }
         
-        public async Task<bool> AddAsync(T entity)
+        public async Task AddAsync(T entity)
         {
             _dbContext.Set<T>().Add(entity);
-            return await SaveAsync();
+            await _dbContext.SaveChangesAsync();
         }
         
-        public async Task<bool> UpdateAsync(T entity)
+        public async Task UpdateAsync(T entity)
         {
             _dbContext.Entry(entity).State = EntityState.Modified;
-            return await SaveAsync();
+            await _dbContext.SaveChangesAsync();
         }
         
-        public async Task<bool> DeleteAsync(T entity)
+        public async Task DeleteAsync(T entity)
         {
             _dbContext.Set<T>().Remove(entity);
-            return await SaveAsync();
-        }
-
-        private async Task<bool> SaveAsync()
-        {
-            try
-            {
-                await _dbContext.SaveChangesAsync();
-
-                return true;
-            }
-            catch (System.Exception e)
-            {
-                throw e;
-            }
+            await _dbContext.SaveChangesAsync();
         }
     }
 }
