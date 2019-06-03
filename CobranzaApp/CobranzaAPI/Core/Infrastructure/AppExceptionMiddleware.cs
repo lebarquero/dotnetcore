@@ -35,14 +35,17 @@ namespace CobranzaAPI.Core.Infrastructure
                     throw;
                 }
                 
+                // TODO
+                // var feature = context.Features.Get<IExceptionHandlerPathFeature>();
+                // _logger.LogError($"Application Log: Se produjo el siguiente error en la acción {feature.Path}: {ex}");
+                
+                _logger.LogError($"Application Log: Se produjo el siguiente error: {ex}");
                 await HandleExceptionAsync(context, ex);
             }
         }
 
         private async Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            var feature = context.Features.Get<IExceptionHandlerPathFeature>();
-            // var exception = feature.Error;
             var exceptionType = exception.GetType();
             var status = HttpStatusCode.InternalServerError;
             string result = string.Empty;
